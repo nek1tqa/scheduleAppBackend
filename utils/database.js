@@ -1,13 +1,13 @@
-import mysql from "mysql2/promise";
+import mysql from "mysql2";
 import databaseConfig from "./databaseConfig.js";
 
-let connection;
-export const createPool = async () => await mysql.createPool(databaseConfig);
+let pool = mysql.createPool(databaseConfig);
+pool = pool.promise();
 
-export const getConnection = async () => {
+// const f = async () => {
+//
+//     await pool.query("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
+//
+// }
 
-    if (!connection)
-        connection = await createPool();
-    return connection;
-
-};
+export default pool;
