@@ -31,20 +31,23 @@ class LessonsController{
 
     async create(req, res){
 
+        let connection = null;
         try{
 
             const lessonData = req.body;
             if(lessonData.title === undefined || lessonData.title.toString().trim() === "")
                 return res.status(400).json({error: "Lesson title is incorrect"});
 
-            const connection = await pool.getConnection();
+            connection = await pool.getConnection();
             await pool.query("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;");
             connection.beginTransaction();
-            const [result, r] = await connection.execute("INSERT INTO `lessons` (title) VALUES (?)", [lessonData.title]);
+            const [result, r] = await connection.execute("INSERT INTO `lessons` (title) VALUES (?);", [lessonData.title]);
             connection.commit();
-            connection.release();
 
-            res.status(200).json();
+            const newItemId = result.insertId;
+            const [newItemResult] = await connection.execute("SELECT * FROM `lessons` WHERE id = ?", [newItemId]);
+            connection.release();
+            res.json(newItemResult);
 
         }catch(e){
             if(connection){
@@ -58,6 +61,7 @@ class LessonsController{
 
     async update(req, res){
 
+        let connection = null;
         try{
 
             const {id} = req.params;
@@ -65,7 +69,7 @@ class LessonsController{
             if(lessonData.title === undefined || lessonData.title.toString().trim() === "")
                 return res.status(400).json({error: "Lesson title is incorrect"});
 
-            const connection = await pool.getConnection();
+            connection = await pool.getConnection();
             await pool.query("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;");
             connection.beginTransaction();
             const [result, r] = await connection.execute("UPDATE `lessons` SET title = ? WHERE id = ?", [lessonData.title, id]);
