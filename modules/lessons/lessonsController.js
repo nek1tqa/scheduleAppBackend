@@ -7,7 +7,7 @@ class LessonsController{
         try{
 
             const [result] = await pool.query("SELECT * FROM `lessons`");
-            res.json(result);
+            res.status(200).json(result);
 
         }catch(e){
             res.status(500).json(e);
@@ -21,7 +21,11 @@ class LessonsController{
 
             const {id} = req.params;
             const [result] = await pool.execute("SELECT * FROM `lessons` WHERE id = ?", [id]);
-            res.json(result);
+
+            if(result.length)
+                res.status(200).json(result[0]);
+            else
+                res.status(404);
 
         }catch(e){
             res.status(500).json(e);
@@ -39,7 +43,7 @@ class LessonsController{
                 return res.status(400).json({error: "Lesson title is incorrect"});
 
             connection = await pool.getConnection();
-            await pool.query("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;");
+            await connection.query("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;");
             connection.beginTransaction();
             const [result, r] = await connection.execute("INSERT INTO `lessons` (title) VALUES (?);", [lessonData.title]);
             connection.commit();
@@ -47,7 +51,8 @@ class LessonsController{
             const newItemId = result.insertId;
             const [newItemResult] = await connection.execute("SELECT * FROM `lessons` WHERE id = ?", [newItemId]);
             connection.release();
-            res.json(newItemResult);
+            
+            res.status(201).json(newItemResult);
 
         }catch(e){
             if(connection){
@@ -70,13 +75,16 @@ class LessonsController{
                 return res.status(400).json({error: "Lesson title is incorrect"});
 
             connection = await pool.getConnection();
-            await pool.query("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;");
+            await connection.query("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;");
             connection.beginTransaction();
             const [result, r] = await connection.execute("UPDATE `lessons` SET title = ? WHERE id = ?", [lessonData.title, id]);
             connection.commit();
             connection.release();
 
-            res.status(200).json();
+            if(result.affectedRows)
+                res.status(200);
+            else
+                res.status(404);
 
         }catch(e){
             if(connection){
@@ -90,15 +98,22 @@ class LessonsController{
 
     async delete(req, res){
 
+        let connection = null;
         try{
 
             const {id} = req.params;
 
-            await pool.query("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;");
+            connection = await pool.getConnection();
+            await connection.query("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;");
             connection.beginTransaction();
-            const [result, r] = await connection.execute("DELETE `lessons` WHERE id = ?", [id]);
+            const [result, r] = await connection.execute("DELETE FROM `lessons` WHERE id = ?", [id]);
             connection.commit();
             connection.release();
+
+            if(result.affectedRows)
+                res.status(200);
+            else
+                res.status(404);
 
         }catch(e){
             if(connection){
