@@ -25,7 +25,7 @@ class LessonsController{
             if(result.length)
                 res.status(200).json(result[0]);
             else
-                res.status(404);
+                res.status(404).json();
 
         }catch(e){
             res.status(500).json(e);
@@ -51,7 +51,7 @@ class LessonsController{
             const newItemId = result.insertId;
             const [newItemResult] = await connection.execute("SELECT * FROM `lessons` WHERE id = ?", [newItemId]);
             connection.release();
-            
+
             res.status(201).json(newItemResult);
 
         }catch(e){
@@ -82,9 +82,9 @@ class LessonsController{
             connection.release();
 
             if(result.affectedRows)
-                res.status(200);
+                res.status(200).json();
             else
-                res.status(404);
+                res.status(404).json();
 
         }catch(e){
             if(connection){
@@ -110,10 +110,11 @@ class LessonsController{
             connection.commit();
             connection.release();
 
+            console.log(result.affectedRows);
             if(result.affectedRows)
-                res.status(200);
+                res.status(200).json();
             else
-                res.status(404);
+                res.status(404).json();
 
         }catch(e){
             if(connection){
