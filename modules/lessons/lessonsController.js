@@ -15,6 +15,20 @@ class LessonsController{
 
     }
 
+    async getOne(req, res){
+
+        try{
+
+            const {id} = req.params;
+            const [result] = await pool.execute("SELECT * FROM `lessons` WHERE id = ?", [id]);
+            res.json(result);
+
+        }catch(e){
+            res.status(500).json(e);
+        }
+
+    }
+
     async create(req, res){
 
         try{
@@ -27,7 +41,6 @@ class LessonsController{
             await pool.query("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;");
             connection.beginTransaction();
             const [result, r] = await connection.execute("INSERT INTO `lessons` (title) VALUES (?)", [lessonData.title]);
-            console.log(result, r);
             connection.commit();
             connection.release();
 
@@ -56,7 +69,6 @@ class LessonsController{
             await pool.query("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;");
             connection.beginTransaction();
             const [result, r] = await connection.execute("UPDATE `lessons` SET title = ? WHERE id = ?", [lessonData.title, id]);
-            console.log(result, r);
             connection.commit();
             connection.release();
 
@@ -81,7 +93,6 @@ class LessonsController{
             await pool.query("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;");
             connection.beginTransaction();
             const [result, r] = await connection.execute("DELETE `lessons` WHERE id = ?", [id]);
-            console.log(result, r);
             connection.commit();
             connection.release();
 
