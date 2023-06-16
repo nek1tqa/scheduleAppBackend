@@ -8,5 +8,4 @@ const appConfig = {
     databaseName: process.env.DATABASE_NAME,
 }
 
-console.log(appConfig);
 export default appConfig;

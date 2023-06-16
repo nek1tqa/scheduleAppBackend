@@ -6,7 +6,7 @@ class LessonsController{
 
         try{
 
-            const [result] = await pool.query("SELECT * FROM `lessonTypes`");
+            const [result] = await pool.query("SELECT * FROM `lesson_types`");
             res.status(200).json(result);
 
         }catch(e){
@@ -20,7 +20,7 @@ class LessonsController{
         try{
 
             const {id} = req.params;
-            const [result] = await pool.execute("SELECT * FROM `lessonTypes` WHERE id = ?", [id]);
+            const [result] = await pool.execute("SELECT * FROM `lesson_types` WHERE id = ?", [id]);
 
             if(result.length)
                 res.status(200).json(result[0]);
@@ -38,18 +38,18 @@ class LessonsController{
         let connection = null;
         try{
 
-            const lessonData = req.body;
-            if(lessonData.value === undefined || lessonData.value.toString().trim() === "")
+            const lessonTypeData = req.body;
+            if(lessonTypeData.value === undefined || lessonTypeData.value.toString().trim() === "")
                 return res.status(400).json({error: "Lesson type value is incorrect"});
 
             connection = await pool.getConnection();
             await connection.query("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;");
             connection.beginTransaction();
-            const [result, r] = await connection.execute("INSERT INTO `lessonTypes` (value) VALUES (?);", [lessonData.value]);
+            const [result] = await connection.execute("INSERT INTO `lesson_types` (value) VALUES (?);", [lessonTypeData.value]);
             connection.commit();
 
             const newItemId = result.insertId;
-            const [newItemResult] = await connection.execute("SELECT * FROM `lessonTypes` WHERE id = ?", [newItemId]);
+            const [newItemResult] = await connection.execute("SELECT * FROM `lesson_types` WHERE id = ?", [newItemId]);
             connection.release();
 
             res.status(200).json(newItemResult);
@@ -70,14 +70,14 @@ class LessonsController{
         try{
 
             const {id} = req.params;
-            const lessonData = req.body;
-            if(lessonData.value === undefined || lessonData.value.toString().trim() === "")
+            const lessonTypeData = req.body;
+            if(lessonTypeData.value === undefined || lessonTypeData.value.toString().trim() === "")
                 return res.status(400).json({error: "Lesson type value is incorrect"});
 
             connection = await pool.getConnection();
             await connection.query("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;");
             connection.beginTransaction();
-            const [result, r] = await connection.execute("UPDATE `lessonTypes` SET value = ? WHERE id = ?", [lessonData.value, id]);
+            const [result] = await connection.execute("UPDATE `lesson_types` SET value = ? WHERE id = ?", [lessonTypeData.value, id]);
             connection.commit();
             connection.release();
 
@@ -106,7 +106,7 @@ class LessonsController{
             connection = await pool.getConnection();
             await connection.query("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;");
             connection.beginTransaction();
-            const [result, r] = await connection.execute("DELETE FROM `lessonTypes` WHERE id = ?", [id]);
+            const [result] = await connection.execute("DELETE FROM `lesson_types` WHERE id = ?", [id]);
             connection.commit();
             connection.release();
 

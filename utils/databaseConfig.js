@@ -4,8 +4,8 @@ const databaseConfig = {
     connectionLimit: 10,
     host: appConfig.databaseHost,
     user: appConfig.databaseLogin,
-    password: "xj7NaKRZkfAxXUnjvsL92)tV",
-    database: "schedule_new",
+    password: appConfig.databasePassword,
+    database: appConfig.databaseName,
     debug: false,
     waitForConnections: true,
     multipleStatements: true
