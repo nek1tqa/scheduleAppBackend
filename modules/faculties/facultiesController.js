@@ -13,7 +13,7 @@ class FacultiesController{
             res.status(200).json(result);
 
         }catch(e){
-            res.status(500).json(e);
+            res.status(500).json({error: e.toString()});
         }
 
     }
@@ -34,7 +34,7 @@ class FacultiesController{
                 res.status(404).json();
 
         }catch(e){
-            res.status(500).json(e);
+            res.status(500).json({error: e.toString()});
         }
 
     }
@@ -88,7 +88,7 @@ class FacultiesController{
                 connection.rollback();
                 connection.release();
             }
-            res.status(500).json(e);
+            res.status(500).json({error: e.toString()});
         }
 
     }
@@ -174,7 +174,7 @@ class FacultiesController{
                 connection.rollback();
                 connection.release();
             }
-            res.status(500).json(e);
+            res.status(500).json({error: e.toString()});
         }
 
     }
@@ -203,7 +203,7 @@ class FacultiesController{
                 connection.rollback();
                 connection.release();
             }
-            res.status(500).json(e);
+            res.status(500).json({error: e.toString()});
         }
     }
 

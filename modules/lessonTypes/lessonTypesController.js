@@ -10,7 +10,7 @@ class LessonsController{
             res.status(200).json(result);
 
         }catch(e){
-            res.status(500).json(e);
+            res.status(500).json({error: e.toString()});
         }
 
     }
@@ -28,7 +28,7 @@ class LessonsController{
                 res.status(404).json();
 
         }catch(e){
-            res.status(500).json(e);
+            res.status(500).json({error: e.toString()});
         }
 
     }
@@ -59,7 +59,7 @@ class LessonsController{
                 connection.rollback();
                 connection.release();
             }
-            res.status(500).json(e);
+            res.status(500).json({error: e.toString()});
         }
 
     }
@@ -91,7 +91,7 @@ class LessonsController{
                 connection.rollback();
                 connection.release();
             }
-            res.status(500).json(e);
+            res.status(500).json({error: e.toString()});
         }
 
     }
@@ -120,7 +120,7 @@ class LessonsController{
                 connection.rollback();
                 connection.release();
             }
-            res.status(500).json(e);
+            res.status(500).json({error: e.toString()});
         }
     }
 
