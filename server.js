@@ -4,6 +4,7 @@ import lessonTypesRouter from "./modules/lessonTypes/lessonTypesRouter.js";
 import facultiesRouter from "./modules/faculties/facultiesRouter.js";
 import roomsRouter from "./modules/rooms/roomsRouter.js";
 import teachersRouter from "./modules/teachers/teachersRouter.js";
+import groupsRouter from "./modules/groups/groupsRouter.js";
 
 
 export const createServer = () => {
@@ -16,6 +17,7 @@ export const createServer = () => {
     app.use("", facultiesRouter);
     app.use("", roomsRouter);
     app.use("", teachersRouter);
+    app.use("", groupsRouter);
 
     return app;
 
