@@ -1,4 +1,5 @@
 import pool from "../../utils/database.js";
+import {getSetString} from "../../utils/databaseUtils.js";
 
 class RoomsController {
 
@@ -85,11 +86,11 @@ class RoomsController {
 
 
 
-            let setString = `SET ${paramsArr.map(param => param[0] + " = " + param[1]).join(", ")}`;
 
             connection = await pool.getConnection();
             await connection.query("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;");
             connection.beginTransaction();
+            let setString = getSetString(paramsArr);
             const [result] = await connection.execute(`UPDATE \`rooms\` ${setString} WHERE id = ?`, [id]);
             connection.commit();
             connection.release();
