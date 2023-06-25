@@ -5,6 +5,7 @@ import facultiesRouter from "./modules/faculties/facultiesRouter.js";
 import roomsRouter from "./modules/rooms/roomsRouter.js";
 import teachersRouter from "./modules/teachers/teachersRouter.js";
 import groupsRouter from "./modules/groups/groupsRouter.js";
+import pagesRouter from "./modules/pages/pagesRouter.js";
 
 
 export const createServer = () => {
@@ -18,6 +19,7 @@ export const createServer = () => {
     app.use("", roomsRouter);
     app.use("", teachersRouter);
     app.use("", groupsRouter);
+    app.use("", pagesRouter);
 
     return app;
 
