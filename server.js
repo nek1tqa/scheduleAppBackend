@@ -7,6 +7,7 @@ import teachersRouter from "./modules/teachers/teachersRouter.js";
 import groupsRouter from "./modules/groups/groupsRouter.js";
 import pagesRouter from "./modules/pages/pagesRouter.js";
 import cors from "cors";
+import roomsScheduleRouter from "./modules/roomsSchedule/roomsScheduleRouter.js";
 
 
 export const createServer = () => {
@@ -22,6 +23,7 @@ export const createServer = () => {
     app.use("", teachersRouter);
     app.use("", groupsRouter);
     app.use("", pagesRouter);
+    app.use("", roomsScheduleRouter);
 
     return app;
 
