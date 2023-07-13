@@ -207,6 +207,23 @@ class FacultiesController{
         }
     }
 
+
+    async getDepartments(req, res){
+
+        try{
+
+            const [result] = await pool.query("SELECT * FROM `faculty_departments`");
+
+            res.status(200).json(result);
+
+        }catch(e){
+            res.status(500).json({error: e.toString()});
+        }
+
+
+    }
+
+
 }
 
 export default new FacultiesController();
