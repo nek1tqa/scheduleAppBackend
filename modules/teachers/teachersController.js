@@ -67,7 +67,7 @@ class TeachersController {
             const [newItemResult] = await connection.execute("SELECT * FROM `teachers_with_departments` WHERE id = ?", [newItemId]);
             connection.release();
 
-            res.status(201).json(newItemResult);
+            res.status(201).json(newItemResult[0]);
 
         }catch(e){
             if(connection){

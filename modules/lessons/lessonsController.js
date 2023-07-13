@@ -52,7 +52,7 @@ class LessonsController{
             const [newItemResult] = await connection.execute("SELECT * FROM `lessons` WHERE id = ?", [newItemId]);
             connection.release();
 
-            res.status(201).json(newItemResult);
+            res.status(201).json(newItemResult[0]);
 
         }catch(e){
             if(connection){

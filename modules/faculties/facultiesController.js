@@ -52,11 +52,11 @@ class FacultiesController{
             if(facultyData.departments === undefined)
                 return res.status(400).json({error: "Faculty departments is undefined"});
 
-            try{
-                facultyData.departments = JSON.parse(facultyData.departments);
-            }catch(e){
-                throw new Error("Can`t parse faculty departments. Format isn`t JSON");
-            }
+            // try{
+            //     facultyData.departments = JSON.parse(facultyData.departments);
+            // }catch(e){
+            //     throw new Error("Can`t parse faculty departments. Format isn`t JSON");
+            // }
 
             for(let department of facultyData.departments)
                 if(department.name === undefined || department.name.toString().trim() === "")
@@ -81,7 +81,7 @@ class FacultiesController{
 
             connection.release();
 
-            res.status(200).json(newItemResult);
+            res.status(200).json(newItemResult[0]);
 
         }catch(e){
             if(connection){
@@ -95,6 +95,7 @@ class FacultiesController{
 
     async update(req, res){
 
+        console.log(req.body);
         let connection = null;
         try{
 
@@ -114,11 +115,11 @@ class FacultiesController{
 
 
 
-            try{
-                facultyData.departments = JSON.parse(facultyData.departments);
-            }catch(e){
-                throw new Error("Can`t parse faculty departments. Format isn`t JSON");
-            }
+            // try{
+            //     facultyData.departments = JSON.parse(facultyData.departments);
+            // }catch(e){
+            //     throw new Error("Can`t parse faculty departments. Format isn`t JSON");
+            // }
 
             for(let department of facultyData.departments){
 
