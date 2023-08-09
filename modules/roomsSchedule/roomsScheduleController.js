@@ -6,7 +6,7 @@ class RoomsScheduleController {
 
         try{
 
-            const [result] = await pool.execute("SELECT * FROM `rooms_schedule_pages`");
+            const [result] = await pool.execute("SELECT * FROM `rooms_schedule`");
             res.status(200).json(result);
 
         }catch(e){
@@ -20,28 +20,20 @@ class RoomsScheduleController {
         const {id} = req.params;
         try{
 
-            const [result] = await pool.execute("SELECT * FROM `rooms_schedule_pages` WHERE id = ?", [id]);
+            let result;
+            const [pageResult] = await pool.execute("SELECT * FROM `rooms_schedule` WHERE id = ?", [id]);
+            result = pageResult[0];
+            result.rooms = JSON.parse(result.rooms);
+
+            const [roomsScheduleResult] = await pool.execute("SELECT * FROM `rooms_schedule_pages__rooms` AS rsp_r JOIN \n" +
+                "`schedule__rooms` AS s_r ON rsp_r.room_id = s_r.room_id LEFT JOIN\n" +
+                "`schedule` AS s ON s.id = s_r.schedule_item_id LEFT JOIN\n" +
+                "`schedule__week_range` AS s_wr ON s.id = s_wr.schedule_item_id LEFT JOIN\n" +
+                "`groups` AS g ON s.group_id = g.id WHERE rooms_schedule_page_id = ?", [id]);
+            result.rooms_schedule = roomsScheduleResult;
+
+
             res.status(200).json(result);
-
-        }catch(e){
-            res.status(500).json({error: e.toString()});
-        }
-
-    }
-
-    async getOne(req, res){
-
-        try{
-
-            const {id} = req.params;
-            const [result] = await pool.execute("SELECT * FROM `rooms_schedule_pages` WHERE id = ?", [id]);
-
-            if(result.length){
-
-                res.status(200).json(result[0]);
-
-            }else
-                res.status(404).json();
 
         }catch(e){
             res.status(500).json({error: e.toString()});
